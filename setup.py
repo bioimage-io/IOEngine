@@ -1,5 +1,6 @@
 """Install package."""
 from pathlib import Path
+
 import setuptools
 
 PROJECT_DIR = Path(__file__).parent.resolve()
