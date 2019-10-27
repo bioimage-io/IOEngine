@@ -1,9 +1,9 @@
 """The BioEngine class."""
 import inspect
-import os
 import sys
 import threading
 import uuid
+from pathlib import Path
 from types import ModuleType
 
 import yaml
@@ -62,23 +62,24 @@ class BioEngine:
 
     def load_package(self, package_dir):
         """Load a service package."""
-        with open(os.path.join(package_dir, "config.yaml"), "r") as fil:
+        config_file = Path(package_dir) / "config.yaml"
+        with open(config_file, "r") as fil:
             package_info = yaml.load(fil, Loader=yaml.FullLoader)
-            package_info["package_dir"] = package_dir
-            try:
-                self._service_lock.acquire()
+        package_info["package_dir"] = package_dir
+        try:
+            self._service_lock.acquire()
 
-                entry_point = os.path.join(package_dir, package_info["entrypoint"])
-                model_script = open(entry_point).read()
-                sys.path.insert(0, package_dir)
+            entry_point = Path(package_dir) / package_info["entrypoint"]
+            model_script = entry_point.read_text()
+            sys.path.insert(0, package_dir)
 
-                self._execute_script(model_script, package_info)
-            except Exception as exc:
-                if package_dir in sys.path:
-                    sys.path.remove(package_dir)
-                raise exc
-            finally:
-                self._service_lock.release()
+            self._execute_script(model_script, package_info)
+        except Exception as exc:
+            if package_dir in sys.path:
+                sys.path.remove(package_dir)
+            raise exc
+        finally:
+            self._service_lock.release()
 
     def _execute_script(self, script, package_info=None):
         """Execute script."""
