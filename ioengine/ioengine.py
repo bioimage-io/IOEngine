@@ -10,6 +10,7 @@ from types import ModuleType
 from ioengine.utils import dotdict
 from ioengine.exceptions import UnsupportedAPI
 
+
 class IOEngine:
     """The IOEngine class."""
 
@@ -111,6 +112,7 @@ api.register(type='service', name='test', run=run)
     ioe.services[0].train()
     ret = ioe.services[0].predict(1)
     print(ret)
+
 
 if __name__ == "__main__":
     main()
