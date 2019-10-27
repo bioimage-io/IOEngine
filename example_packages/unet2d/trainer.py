@@ -2,8 +2,7 @@ import torch
 import torch.utils.data
 from tqdm import trange
 
-from transforms import apply_transforms
-from parser import parse_config
+from unet2d.transforms import apply_transforms
 
 
 def train(config, out_file):

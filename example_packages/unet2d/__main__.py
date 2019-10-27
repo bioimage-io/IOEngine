@@ -1,15 +1,13 @@
-from bioengine import api
-import numpy as np
 import torch
 import torch.utils.data
 from tqdm import trange
 
-from transforms import apply_transforms
-from parser import parse_config
+from bioengine import api
+from unet2d.parser import parse_config
+from unet2d.transforms import apply_transforms
+
 
 config = api.getConfig()
-
-
 model, train_config, data_config = parse_config(config)
 
 # print(model, train_config, data_config)

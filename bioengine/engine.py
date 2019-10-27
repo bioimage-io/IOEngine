@@ -1,14 +1,15 @@
 """The BioEngine class."""
 import inspect
-import sys
-import yaml
 import os
+import sys
 import threading
 import uuid
 from types import ModuleType
 
-from bioengine.utils import dotdict
+import yaml
+
 from bioengine.exceptions import UnsupportedAPI
+from bioengine.utils import dotdict
 
 
 class BioEngine:

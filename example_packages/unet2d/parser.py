@@ -1,12 +1,10 @@
-import os
 from importlib import import_module
 
-import yaml
 import torch.nn as nn
 import torch.optim as optim
 
-import data as datasets
-import transforms as core_trafos
+import unet2d.data as datasets
+import unet2d.transforms as core_trafos
 
 
 def get_class(name, packages):
