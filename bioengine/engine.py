@@ -8,7 +8,7 @@ from types import ModuleType
 
 import yaml
 
-from bioengine.exceptions import UnsupportedAPI
+from bioengine.exceptions import PackageNotFound, UnsupportedAPI
 from bioengine.utils import dotdict
 
 
@@ -99,7 +99,7 @@ class BioEngine:
                 sys.path.remove(package_dir)
             del self.packages[package_id]
         else:
-            raise Exception(f"Package {package_id} not found")
+            raise PackageNotFound(package_id)
 
 
 def main():
