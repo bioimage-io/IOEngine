@@ -5,6 +5,7 @@ import setuptools
 
 PROJECT_DIR = Path(__file__).parent.resolve()
 LONG_DESCR = (PROJECT_DIR / "README.md").read_text(encoding="utf-8")
+REQUIRES = ["imageio", "numpy", "pyyaml", "torch", "tqdm"]
 
 setuptools.setup(
     name="BioEngine",
@@ -15,7 +16,7 @@ setuptools.setup(
     description="Engine for the model zoo",
     long_description=LONG_DESCR,
     packages=setuptools.find_packages(),
-    install_requires=["pyyaml"],
+    install_requires=REQUIRES,
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
         "Programming Language :: Python",
