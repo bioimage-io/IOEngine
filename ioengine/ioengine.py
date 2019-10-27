@@ -1,18 +1,20 @@
 """The IOEngine class."""
 import inspect
-from types import ModuleType
 import sys
-from utils import dotdict
 import yaml
 import os
 import threading
 import uuid
+from types import ModuleType
 
+from ioengine.utils import dotdict
+from ioengine.exceptions import UnsupportedAPI
 
 class IOEngine:
-    """The IOEngine class"""
+    """The IOEngine class."""
 
     def __init__(self):
+        """Set up engine."""
         self.services = []
         self.packages = {}
         self.engine_api = dotdict(showMessage=print, register=self.register_service)
@@ -21,20 +23,22 @@ class IOEngine:
     def register_service(self, **api):
         """Set interface."""
         if isinstance(api, dict):
-            api = {a: api[a] for a in api if not a.startswith("_")}
+            api = {a: value for a, value in api.items() if not a.startswith("_")}
         elif inspect.isclass(type(api)):
             api = {a: getattr(api, a) for a in dir(api) if not a.startswith("_")}
         else:
-            raise Exception("unsupported api export")
+            raise UnsupportedAPI
         self.services.append(dotdict(**api))
 
     def register(self, **kwarg):
+        """Register api resources."""
         if kwarg["type"] == "service":
-            self.register_service(kwarg)
+            self.register_service(**kwarg)
         else:
             raise NotImplementedError
 
     def execute(self, script):
+        """Execute a script via the api."""
         # make a fake module with api
         mod = ModuleType("bioimage")
         sys.modules[mod.__name__] = mod  # pylint: disable=no-member
@@ -43,6 +47,7 @@ class IOEngine:
         exec(script, self.engine_api)  # pylint: disable=exec-used
 
     def load_package(self, package_dir):
+        """load a service package."""
         with open(os.path.join(package_dir, "config.yaml"), "r") as f:
             package_info = yaml.load(f, Loader=yaml.FullLoader)
             package_info["id"] = str(uuid.uuid4())
@@ -83,7 +88,8 @@ class IOEngine:
             raise Exception(f"Package {package_id} not found")
 
 
-if __name__ == "__main__":
+def main():
+    """Run main."""
     ioe = IOEngine()
     # execute a model script directly
     ioe.execute(
@@ -105,3 +111,6 @@ api.register(type='service', name='test', run=run)
     ioe.services[0].train()
     ret = ioe.services[0].predict(1)
     print(ret)
+
+if __name__ == "__main__":
+    main()
