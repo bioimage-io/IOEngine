@@ -23,7 +23,7 @@ class IOEngine:
     def register_service(self, **api):
         """Set interface."""
         if isinstance(api, dict):
-            api = {a: api[a] for a in api if not a.startswith("_")}
+            api = {a: value for a, value in api.items() if not a.startswith("_")}
         elif inspect.isclass(type(api)):
             api = {a: getattr(api, a) for a in dir(api) if not a.startswith("_")}
         else:
