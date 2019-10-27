@@ -1,8 +1,9 @@
 """The IOEngine class."""
 import inspect
-from types import ModuleType
 import sys
-from .utils import dotdict
+from types import ModuleType
+
+from ioengine.utils import dotdict
 
 
 class IOEngine:
