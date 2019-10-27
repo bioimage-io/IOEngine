@@ -50,7 +50,7 @@ def predict(X):
 
 api.register(
     type="model",
-    input_shape=[None, 4, 256, 256],
+    input_shape=[None, 1, 256, 256],
     output_shape=[None, 1, 256, 256],
     train=train,
     predict=predict,
