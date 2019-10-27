@@ -3,7 +3,7 @@
 ## Engine API
 
   * api.register
-  * 
+  *
 
 ## Development
 
@@ -25,9 +25,9 @@
   black ./
   ```
 
-  To test it, run 
+- To test it, run:
 
   ```
-pip install -e .
-python bioengine/engine.py
+  pip install -e .
+  python bioengine/engine.py
   ```
