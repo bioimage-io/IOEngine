@@ -23,6 +23,7 @@ class BioEngine:
         self.vendor_api = vendor_api
 
     def generate_engine_api(self, package_info=None, make_api_module=True):
+        """Return engine api."""
         engine_api = dotdict(showMessage=print, register=self.register_service)
         if self.vendor_api:
             engine_api.update(self.vendor_api)
@@ -65,7 +66,7 @@ class BioEngine:
         self.packages[package_info["id"]] = package_info
 
     def load_package(self, package_dir):
-        """load a service package."""
+        """Load a service package."""
         with open(os.path.join(package_dir, "config.yaml"), "r") as f:
             package_info = yaml.load(f, Loader=yaml.FullLoader)
             package_info["id"] = str(uuid.uuid4())
@@ -90,6 +91,7 @@ class BioEngine:
                 self._service_lock.release()
 
     def unload_package(self, package_id):
+        """Unload package."""
         if package_id in self.packages:
             package_info = self.packages[package_id]
             package_dir = package_info["package_dir"]
