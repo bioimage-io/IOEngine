@@ -1,5 +1,10 @@
 # IOEngine
 
+## Engine API
+
+  * api.register
+  * 
+
 ## Development
 
 - Install the packages needed for development.
@@ -18,4 +23,11 @@
 
   ```
   black ./
+  ```
+
+  To test it, run 
+
+  ```
+pip install -e .
+python ioengine/engine.py
   ```

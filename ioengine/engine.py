@@ -14,12 +14,28 @@ from ioengine.exceptions import UnsupportedAPI
 class IOEngine:
     """The IOEngine class."""
 
-    def __init__(self):
+    def __init__(self, vendor_api=None):
         """Set up engine."""
         self.services = []
         self.packages = {}
-        self.engine_api = dotdict(showMessage=print, register=self.register_service)
         self._service_lock = threading.Lock()
+        self.vendor_api = vendor_api
+
+    def generate_engine_api(self, package_info=None, make_api_module=True):
+        engine_api = dotdict(showMessage=print, register=self.register_service)
+        if self.vendor_api:
+            engine_api.update(self.vendor_api)
+        if package_info:
+            engine_api.getPackageInfo = lambda: package_info
+            engine_api.getConfig = lambda: package_info.get("config")
+
+        if make_api_module:
+            # make a fake module with api
+            mod = ModuleType("ioengine")
+            sys.modules[mod.__name__] = mod  # pylint: disable=no-member
+            mod.__file__ = mod.__name__ + ".py"  # pylint: disable=no-member
+            mod.api = engine_api
+        return engine_api
 
     def register_service(self, **api):
         """Set interface."""
@@ -40,12 +56,12 @@ class IOEngine:
 
     def execute(self, script):
         """Execute a script via the api."""
-        # make a fake module with api
-        mod = ModuleType("bioimage")
-        sys.modules[mod.__name__] = mod  # pylint: disable=no-member
-        mod.__file__ = mod.__name__ + ".py"  # pylint: disable=no-member
-        mod.api = dotdict(**self.engine_api)
-        exec(script, self.engine_api)  # pylint: disable=exec-used
+        package_info = {}
+        package_info["id"] = str(uuid.uuid4())
+        package_info["_locals"] = {}
+        self.generate_engine_api()
+        exec(script, package_info["_locals"])  # pylint: disable=exec-used
+        self.packages[package_info["id"]] = package_info
 
     def load_package(self, package_dir):
         """load a service package."""
@@ -61,13 +77,7 @@ class IOEngine:
                 model_script = open(entry_point).read()
                 sys.path.insert(0, package_dir)
 
-                # make a fake module with api
-                mod = ModuleType("bioimage")
-                sys.modules[mod.__name__] = mod  # pylint: disable=no-member
-                mod.__file__ = mod.__name__ + ".py"  # pylint: disable=no-member
-                mod.api = dotdict(**self.engine_api)
-                mod.api.getServiceInfo = lambda: package_info
-                mod.api.getConfig = lambda: package_info.get("config")
+                self.generate_engine_api(package_info)
 
                 exec(model_script, package_info["_locals"])
                 self.packages[package_info["id"]] = package_info
@@ -95,7 +105,7 @@ def main():
     # execute a model script directly
     ioe.execute(
         """
-from bioimage import api
+from ioengine import api
 def run():
     api.showMessage('hello')
 api.register(type='service', name='test', run=run)
@@ -106,7 +116,7 @@ api.register(type='service', name='test', run=run)
 
     ioe = IOEngine()
     # load a service package
-    ioe.load_package("../example_packages/unet2d")
+    ioe.load_package("./example_packages/unet2d")
     print(f"Service registered: {ioe.services}")
     # use the registered service
     ioe.services[0].train()
