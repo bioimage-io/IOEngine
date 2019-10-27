@@ -5,7 +5,7 @@ import setuptools
 
 PROJECT_DIR = Path(__file__).parent.resolve()
 LONG_DESCR = (PROJECT_DIR / "README.md").read_text(encoding="utf-8")
-REQUIRES = ["imageio", "numpy", "pyyaml", "torch", "tqdm"]
+REQUIRES = ["pyyaml"]
 
 setuptools.setup(
     name="BioEngine",
