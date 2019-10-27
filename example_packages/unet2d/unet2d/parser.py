@@ -1,3 +1,4 @@
+"""Provide a parser."""
 from importlib import import_module
 
 import torch.nn as nn
@@ -8,6 +9,7 @@ import unet2d.transforms as core_trafos
 
 
 def get_class(name, packages):
+    """Return a class in packages."""
     for pkg in packages:
         if hasattr(pkg, name):
             return getattr(pkg, name)
@@ -15,6 +17,7 @@ def get_class(name, packages):
 
 
 def parse_train_config(train_config, model):
+    """Parse the training config."""
     loss_config = train_config["loss"]
     loss = get_class(loss_config["name"], [nn])(**loss_config.get("kwargs", {}))
 
@@ -51,6 +54,7 @@ def parse_train_config(train_config, model):
 
 
 def parse_data_config(data_config):
+    """Parse the data config."""
     in_config = data_config["input_transformations"]
     in_transforms = [
         get_class(trafo["name"], [core_trafos])(**trafo.get("kwargs", {}))
@@ -67,6 +71,7 @@ def parse_data_config(data_config):
 
 
 def parse_model_config(model_config):
+    """Parse the model config."""
     definition = model_config["definition"]
     module_name = definition["name"]
     kwargs = definition.get("kwargs", {})
@@ -80,6 +85,7 @@ def parse_model_config(model_config):
 
 
 def parse_config(config):
+    """Parse the config."""
     model = parse_model_config(config["model"])
     train_dict = parse_train_config(config["training"], model)
     data_dict = parse_data_config(config["data"])

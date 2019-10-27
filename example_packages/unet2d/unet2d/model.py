@@ -1,21 +1,29 @@
+"""Provde model classes."""
 import torch
 import torch.nn as nn
 
 
 class Upsample(nn.Module):
+    """Represent an upsample model."""
+
     def __init__(self, scale_factor, mode="bilinear"):
+        """Set up model."""
         super().__init__()
         self.scale_factor = scale_factor
         self.mode = mode
 
     def forward(self, input):
+        """Return forward pass."""
         return nn.functional.interpolate(
             input, scale_factor=self.scale_factor, mode=self.mode, align_corners=False
         )
 
 
 class UNet2d(nn.Module):
+    """Represent a unet2d model."""
+
     def __init__(self, input_channels, output_channels):
+        """Set up model."""
         super().__init__()
         self.input_channels = input_channels
         self.output_channels = output_channels
@@ -42,6 +50,7 @@ class UNet2d(nn.Module):
         self.output = nn.Conv2d(16, self.output_channels, 1)
 
     def conv_layer(self, in_channels, out_channels):
+        """Return a conv layer."""
         kernel_size = 3
         padding = 1
         return nn.Sequential(
@@ -51,12 +60,15 @@ class UNet2d(nn.Module):
         )
 
     def downsampler(self):
+        """Return downsampler."""
         return nn.MaxPool2d(2)
 
     def upsampler(self, in_channels, out_channels):
+        """Return upsampler."""
         return nn.Sequential(Upsample(2), nn.Conv2d(in_channels, out_channels, 1))
 
     def forward(self, input):
+        """Return forward pass."""
         x = input
 
         from_encoder = []

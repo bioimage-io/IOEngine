@@ -1,3 +1,4 @@
+"""Main module."""
 import torch
 import torch.utils.data
 from tqdm import trange
@@ -14,6 +15,7 @@ model, train_config, data_config = parse_config(config)
 
 
 def train():
+    """Train the model."""
     model.train()
     optimizer, loss = train_config["optimizer"], train_config["loss"]
     loss_trafos, batch_size = train_config["transforms"], train_config["batch_size"]
@@ -43,6 +45,7 @@ def train():
 
 
 def predict(X):
+    """Predict X with the model."""
     return model(X)
 
 

@@ -1,3 +1,4 @@
+"""Load the dataset."""
 import os
 import zipfile
 from urllib.request import urlretrieve
@@ -9,6 +10,7 @@ import torch.utils.data
 
 
 def download_data(url, data_dir, prefix):
+    """Download data."""
     os.makedirs(data_dir, exist_ok=True)
     tmp = os.path.join(data_dir, "tmp.zip")
 
@@ -24,6 +26,7 @@ def download_data(url, data_dir, prefix):
 
 
 def load_file_list(file_list, data_folder, is_tif=False):
+    """Load file list."""
     files = []
     with open(file_list, "r") as f:
         for ll in f:
@@ -38,6 +41,7 @@ def load_file_list(file_list, data_folder, is_tif=False):
 
 
 def load_images(files):
+    """Load images."""
     images = []
     for ff in files:
         im = np.asarray(imageio.imread(ff))
@@ -50,6 +54,8 @@ def load_images(files):
 
 
 class NucleiDataset(torch.utils.data.Dataset):
+    """Represent the nuclei dataset."""
+
     # TODO store hashes and validate
     urls = {
         "images": "https://data.broadinstitute.org/bbbc/BBBC039/images.zip",
@@ -58,6 +64,7 @@ class NucleiDataset(torch.utils.data.Dataset):
     }
 
     def get_data(self, data_dir):
+        """Return images and labels."""
         for prefix, url in self.urls.items():
             if not os.path.exists(os.path.join(data_dir, prefix)):
                 print("Downloading", prefix, "...")
@@ -84,6 +91,7 @@ class NucleiDataset(torch.utils.data.Dataset):
         return images, labels
 
     def __init__(self, data_dir="./tmp"):
+        """Set up dataset."""
         self.x, self.y = self.get_data(data_dir)
         if len(self.x) != len(self.y):
             raise RuntimeError("Invalid data")

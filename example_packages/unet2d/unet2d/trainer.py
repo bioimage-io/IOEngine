@@ -1,3 +1,4 @@
+"""Provide a trainer."""
 import torch
 import torch.utils.data
 from tqdm import trange
@@ -6,6 +7,7 @@ from unet2d.transforms import apply_transforms
 
 
 def train(config, out_file):
+    """Train a model from config."""
     model, train_config, data_config = (
         config["model"],
         config["training"],
