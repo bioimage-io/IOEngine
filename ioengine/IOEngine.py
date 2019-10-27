@@ -7,7 +7,7 @@ from ioengine.utils import dotdict
 
 
 class IOEngine:
-    """The IOEngine class"""
+    """The IOEngine class."""
 
     def __init__(self):
         self.services = []
@@ -30,16 +30,19 @@ class IOEngine:
         self.services.append(dotdict(**api))
 
     def register(self, **kwarg):
+        """Register api resources."""
         if kwarg["type"] == "service":
-            self.register_service(kwarg)
+            self.register_service(**kwarg)
         else:
             raise NotImplementedError
 
     def execute(self, script):
+        """Execute a script via the api."""
         exec(script, self.engine_api)  # pylint: disable=exec-used
 
 
-if __name__ == "__main__":
+def main():
+    """Run main."""
     test_script = """
 from bioimage import api
 def run():
@@ -52,3 +55,7 @@ api.register(type='service', name='test', run=run)
 
     # use the registered service
     ioe.services[0].run()
+
+
+if __name__ == "__main__":
+    main()
