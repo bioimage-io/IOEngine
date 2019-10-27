@@ -4,6 +4,7 @@ import sys
 from types import ModuleType
 
 from ioengine.utils import dotdict
+from ioengine.exceptions import UnsupportedAPI
 
 
 class IOEngine:
@@ -27,7 +28,7 @@ class IOEngine:
         elif inspect.isclass(type(api)):
             api = {a: getattr(api, a) for a in dir(api) if not a.startswith("_")}
         else:
-            raise Exception("unsupported api export")
+            raise UnsupportedAPI
         self.services.append(dotdict(**api))
 
     def register(self, **kwarg):
