@@ -11,13 +11,13 @@ requirements:
   pip:
     - pyyaml
 
-entrypoint: __main__.py
+entrypoint: unet2d/__main__.py
 
 config:
   model:
     definition:
       hash: 12
-      name: model.UNet2d
+      name: unet2d.model.UNet2d
       kwargs: { input_channels: 1, output_channels: 1 }
     weights:
       source: 10.5281/zenodo.3446812

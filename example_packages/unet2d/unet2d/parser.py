@@ -71,11 +71,11 @@ def parse_model_config(model_config):
     module_name = definition["name"]
     kwargs = definition.get("kwargs", {})
     module_names = module_name.split(".")
-    model_module = import_module(module_names[0])
+    model_module = import_module(".".join(module_names[:-1]))
 
-    if not getattr(model_module, module_names[1]):
+    if not getattr(model_module, module_names[-1]):
         raise RuntimeError("Class name %s does not exist" % module_names[1])
-    model = getattr(model_module, module_names[1])(**kwargs)
+    model = getattr(model_module, module_names[-1])(**kwargs)
     return model
 
 
