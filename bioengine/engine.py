@@ -39,7 +39,7 @@ class BioEngine:
             mod.api = engine_api
         return engine_api
 
-    def register_service(self, **api):
+    def register_service(self, api):
         """Set interface."""
         if isinstance(api, dict):
             api = {a: value for a, value in api.items() if not a.startswith("_")}
@@ -52,7 +52,7 @@ class BioEngine:
     def register(self, **kwarg):
         """Register api resources."""
         if kwarg["type"] == "service":
-            self.register_service(**kwarg)
+            self.register_service(kwarg)
         else:
             raise NotImplementedError
 
@@ -112,7 +112,7 @@ def main():
 from bioengine import api
 def run():
     api.showMessage('hello')
-api.register(type='service', name='test', run=run)
+api.register(dict(type='service', name='test', run=run))
 """
     )
     print(f"Service registered: {engine.services}")
