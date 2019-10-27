@@ -1,5 +1,5 @@
 """Tests for the ioengine api."""
-from ioengine.IOEngine import IOEngine
+from ioengine.ioengine import IOEngine
 
 TEST_SCRIPT = """
 from bioimage import api
