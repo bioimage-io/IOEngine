@@ -10,7 +10,7 @@ REQUIRES = ["imageio", "numpy", "pyyaml", "torch", "tqdm"]
 setuptools.setup(
     name="unet2d",
     version="0.1.0",
-    author="BioEngine Authors",
+    author="bioimage-io authors",
     author_email="example@email.com",
     description="Example unet2d model for the model zoo",
     long_description=LONG_DESCR,
