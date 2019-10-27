@@ -7,10 +7,10 @@ PROJECT_DIR = Path(__file__).parent.resolve()
 LONG_DESCR = (PROJECT_DIR / "README.md").read_text(encoding="utf-8")
 
 setuptools.setup(
-    name="IOEngine",
+    name="BioEngine",
     version="0.1.0",
-    url="https://github.com/bioimage-io/IOEngine",
-    author="IOEngine Authors",
+    url="https://github.com/bioimage-io/BioEngine",
+    author="BioEngine Authors",
     author_email="example@email.com",
     description="Engine for the model zoo",
     long_description=LONG_DESCR,

@@ -1,4 +1,4 @@
-"""The IOEngine class."""
+"""The BioEngine class."""
 import inspect
 import sys
 import yaml
@@ -7,12 +7,12 @@ import threading
 import uuid
 from types import ModuleType
 
-from ioengine.utils import dotdict
-from ioengine.exceptions import UnsupportedAPI
+from bioengine.utils import dotdict
+from bioengine.exceptions import UnsupportedAPI
 
 
-class IOEngine:
-    """The IOEngine class."""
+class BioEngine:
+    """The BioEngine class."""
 
     def __init__(self, vendor_api=None):
         """Set up engine."""
@@ -31,7 +31,7 @@ class IOEngine:
 
         if make_api_module:
             # make a fake module with api
-            mod = ModuleType("ioengine")
+            mod = ModuleType("bioengine")
             sys.modules[mod.__name__] = mod  # pylint: disable=no-member
             mod.__file__ = mod.__name__ + ".py"  # pylint: disable=no-member
             mod.api = engine_api
@@ -101,11 +101,11 @@ class IOEngine:
 
 def main():
     """Run main."""
-    ioe = IOEngine()
+    ioe = BioEngine()
     # execute a model script directly
     ioe.execute(
         """
-from ioengine import api
+from bioengine import api
 def run():
     api.showMessage('hello')
 api.register(type='service', name='test', run=run)
@@ -114,7 +114,7 @@ api.register(type='service', name='test', run=run)
     print(f"Service registered: {ioe.services}")
     ioe.services[0].run()
 
-    ioe = IOEngine()
+    ioe = BioEngine()
     # load a service package
     ioe.load_package("./example_packages/unet2d")
     print(f"Service registered: {ioe.services}")

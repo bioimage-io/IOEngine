@@ -1,4 +1,4 @@
-# IOEngine
+# BioEngine
 
 ## Engine API
 
@@ -29,5 +29,5 @@
 
   ```
 pip install -e .
-python ioengine/engine.py
+python bioengine/engine.py
   ```

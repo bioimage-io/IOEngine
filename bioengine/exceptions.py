@@ -1,8 +1,8 @@
-"""Provide ioengine exceptions."""
+"""Provide bioengine exceptions."""
 
 
 class IOEngineException(Exception):
-    """Represent the base IOEngine exception."""
+    """Represent the base BioEngine exception."""
 
 
 class UnsupportedAPI(IOEngineException):
