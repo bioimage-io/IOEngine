@@ -2,6 +2,7 @@ name: Unet2D
 description: A 2d U-Net pretrained on broad nucleus dataset.
 cite: "Ronneberger, Olaf et al. U-net: Convolutional networks for biomedical image segmentation. MICCAI 2015."
 version: 0.0.1
+docs: README.md
 
 requirements: 
     conda:
