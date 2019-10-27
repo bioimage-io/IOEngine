@@ -1,4 +1,6 @@
 """Provde model classes."""
+from pathlib import Path
+
 import torch
 import torch.nn as nn
 
@@ -91,6 +93,9 @@ class UNet2d(nn.Module):
 
 
 if __name__ == "__main__":
-    from core.train import train
+    from unet2d.trainer import train
 
-    train("example_configuration.yaml", "unet2d_weights.torch")
+    project_dir = Path(__file__).parent.parent.resolve()
+    config_file = project_dir / "config.yaml"
+
+    train(config_file, "unet2d_weights.torch")

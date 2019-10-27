@@ -2,17 +2,19 @@
 import torch
 import torch.utils.data
 from tqdm import trange
+import yaml
 
+from unet2d.parser import parse_config
 from unet2d.transforms import apply_transforms
 
 
-def train(config, out_file):
+def train(config_file, out_file):
     """Train a model from config."""
-    model, train_config, data_config = (
-        config["model"],
-        config["training"],
-        config["data"],
-    )
+    with open(config_file, "r") as f:
+        config = yaml.load(f)
+    config = config["config"]
+    model, train_config, data_config = parse_config(config)
+
     model.train()
 
     optimizer, loss = train_config["optimizer"], train_config["loss"]
