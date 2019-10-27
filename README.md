@@ -1,5 +1,12 @@
 # BioEngine
 
+## Install
+
+- Python 3.6+ is required.
+  ```
+  pip install .
+  ```
+
 ## Engine API
 
   * api.register
