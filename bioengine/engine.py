@@ -67,8 +67,8 @@ class BioEngine:
 
     def load_package(self, package_dir):
         """Load a service package."""
-        with open(os.path.join(package_dir, "config.yaml"), "r") as f:
-            package_info = yaml.load(f, Loader=yaml.FullLoader)
+        with open(os.path.join(package_dir, "config.yaml"), "r") as fil:
+            package_info = yaml.load(fil, Loader=yaml.FullLoader)
             package_info["id"] = str(uuid.uuid4())
             package_info["_locals"] = {}
             package_info["package_dir"] = package_dir
@@ -81,12 +81,12 @@ class BioEngine:
 
                 self.generate_engine_api(package_info)
 
-                exec(model_script, package_info["_locals"])
+                exec(model_script, package_info["_locals"])  # pylint: disable=exec-used
                 self.packages[package_info["id"]] = package_info
-            except Exception as e:
+            except Exception as exc:
                 if package_dir in sys.path:
                     sys.path.remove(package_dir)
-                raise e
+                raise exc
             finally:
                 self._service_lock.release()
 
