@@ -58,19 +58,12 @@ class BioEngine:
 
     def execute(self, script):
         """Execute a script via the api."""
-        package_info = {}
-        package_info["id"] = str(uuid.uuid4())
-        package_info["_locals"] = {}
-        self.generate_engine_api()
-        exec(script, package_info["_locals"])  # pylint: disable=exec-used
-        self.packages[package_info["id"]] = package_info
+        self._execute_script(script)
 
     def load_package(self, package_dir):
         """Load a service package."""
         with open(os.path.join(package_dir, "config.yaml"), "r") as fil:
             package_info = yaml.load(fil, Loader=yaml.FullLoader)
-            package_info["id"] = str(uuid.uuid4())
-            package_info["_locals"] = {}
             package_info["package_dir"] = package_dir
             try:
                 self._service_lock.acquire()
@@ -79,16 +72,23 @@ class BioEngine:
                 model_script = open(entry_point).read()
                 sys.path.insert(0, package_dir)
 
-                self.generate_engine_api(package_info)
-
-                exec(model_script, package_info["_locals"])  # pylint: disable=exec-used
-                self.packages[package_info["id"]] = package_info
+                self._execute_script(model_script, package_info)
             except Exception as exc:
                 if package_dir in sys.path:
                     sys.path.remove(package_dir)
                 raise exc
             finally:
                 self._service_lock.release()
+
+    def _execute_script(self, script, package_info=None):
+        """Execute script."""
+        if package_info is None:
+            package_info = {}
+        package_info["id"] = str(uuid.uuid4())
+        package_info["_locals"] = {}
+        self.generate_engine_api(package_info)
+        exec(script, package_info["_locals"])  # pylint: disable=exec-used
+        self.packages[package_info["id"]] = package_info
 
     def unload_package(self, package_id):
         """Unload package."""
