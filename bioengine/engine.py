@@ -101,9 +101,9 @@ class BioEngine:
 
 def main():
     """Run main."""
-    ioe = BioEngine()
+    engine = BioEngine()
     # execute a model script directly
-    ioe.execute(
+    engine.execute(
         """
 from bioengine import api
 def run():
@@ -111,16 +111,16 @@ def run():
 api.register(type='service', name='test', run=run)
 """
     )
-    print(f"Service registered: {ioe.services}")
-    ioe.services[0].run()
+    print(f"Service registered: {engine.services}")
+    engine.services[0].run()
 
-    ioe = BioEngine()
+    engine = BioEngine()
     # load a service package
-    ioe.load_package("./example_packages/unet2d")
-    print(f"Service registered: {ioe.services}")
+    engine.load_package("./example_packages/unet2d")
+    print(f"Service registered: {engine.services}")
     # use the registered service
-    ioe.services[0].train()
-    ret = ioe.services[0].predict(1)
+    engine.services[0].train()
+    ret = engine.services[0].predict(1)
     print(ret)
 
 

@@ -1,8 +1,8 @@
 """Tests for the bioengine api."""
-from bioengine.bioengine import BioEngine
+from bioengine.engine import BioEngine
 
 TEST_SCRIPT = """
-from bioimage import api
+from bioengine import api
 
 def run():
     api.showMessage('hello')
@@ -13,11 +13,11 @@ api.register(type='service', name='test', run=run)
 
 def test_register_api(capsys):
     """Test register an api."""
-    ioe = BioEngine()
-    ioe.execute(TEST_SCRIPT)
+    engine = BioEngine()
+    engine.execute(TEST_SCRIPT)
 
-    assert ioe.services
-    service = ioe.services[0]
+    assert engine.services
+    service = engine.services[0]
     assert service.type == "service"
     assert service.name == "test"
 
