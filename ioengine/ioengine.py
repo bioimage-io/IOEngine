@@ -10,6 +10,7 @@ class IOEngine:
     """The IOEngine class."""
 
     def __init__(self):
+        """Set up engine."""
         self.services = []
         self.engine_api = dotdict(showMessage=print, register=self.register_service)
 
