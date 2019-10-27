@@ -2,7 +2,7 @@
 import inspect
 from types import ModuleType
 import sys
-from utils import dotdict
+from .utils import dotdict
 
 
 class IOEngine:
