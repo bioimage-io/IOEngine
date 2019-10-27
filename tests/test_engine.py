@@ -1,4 +1,6 @@
 """Tests for the bioengine api."""
+import pytest
+
 from bioengine.engine import BioEngine
 
 TEST_SCRIPT = """
@@ -26,26 +28,11 @@ api.register(api=TestClass())
 """.strip()
 
 
-def test_register_api(capsys):
+@pytest.mark.parametrize("test_script", [TEST_SCRIPT, TEST_CLASS_SCRIPT])
+def test_register_api(test_script, capsys):
     """Test register an api."""
     engine = BioEngine()
-    engine.execute(TEST_SCRIPT)
-
-    assert engine.services
-    service = engine.services[0]
-    assert service.type == "service"
-    assert service.name == "test"
-
-    service.run()
-
-    captured = capsys.readouterr()
-    assert "hello" in captured.out
-
-
-def test_register_instance(capsys):
-    """Test register a class instance as api."""
-    engine = BioEngine()
-    engine.execute(TEST_CLASS_SCRIPT)
+    engine.execute(test_script)
 
     assert engine.services
     service = engine.services[0]
