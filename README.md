@@ -1,4 +1,16 @@
-# IOEngine
+# BioEngine
+
+## Install
+
+- Python 3.6+ is required.
+  ```
+  pip install .
+  ```
+
+## Engine API
+
+  * api.register
+  *
 
 ## Development
 
@@ -18,4 +30,11 @@
 
   ```
   black ./
+  ```
+
+- To test it, run:
+
+  ```
+  pip install -e .
+  python bioengine/engine.py
   ```

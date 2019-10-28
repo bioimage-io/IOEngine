@@ -5,15 +5,14 @@ import setuptools
 
 PROJECT_DIR = Path(__file__).parent.resolve()
 LONG_DESCR = (PROJECT_DIR / "README.md").read_text(encoding="utf-8")
-REQUIRES = ["pyyaml"]
+REQUIRES = ["imageio", "numpy", "pyyaml", "torch", "tqdm"]
 
 setuptools.setup(
-    name="BioEngine",
+    name="unet2d",
     version="0.1.0",
-    url="https://github.com/bioimage-io/BioEngine",
-    author="BioEngine Authors",
+    author="bioimage-io authors",
     author_email="example@email.com",
-    description="Engine for the model zoo",
+    description="Example unet2d model for the model zoo",
     long_description=LONG_DESCR,
     packages=setuptools.find_packages(),
     install_requires=REQUIRES,
