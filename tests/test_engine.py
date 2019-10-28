@@ -7,7 +7,7 @@ TEST_SCRIPT = """
 from bioengine import api
 
 def run():
-    api.showMessage('hello')
+    api.show_message('hello')
 
 api.register(dict(type='service', name='test', run=run))
 """.strip()
@@ -22,7 +22,7 @@ class TestClass:
         self.name = "test"
 
     def run(self):
-        api.showMessage("hello")
+        api.show_message("hello")
 
 api.register(api=TestClass())
 """.strip()

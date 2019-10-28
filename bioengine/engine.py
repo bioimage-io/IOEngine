@@ -24,11 +24,15 @@ class BioEngine:
 
     def generate_engine_api(self, package_info=None, make_api_module=True):
         """Return engine api."""
-        engine_api = dotdict(showMessage=print, register=self.register_service)
+        engine_api = dotdict(
+            showMessage=print, show_message=print, register=self.register_service
+        )
         if self.vendor_api:
             engine_api.update(self.vendor_api)
         if package_info:
+            engine_api.get_package_info = lambda: package_info
             engine_api.getPackageInfo = lambda: package_info
+            engine_api.get_config = lambda: package_info.get("config")
             engine_api.getConfig = lambda: package_info.get("config")
 
         if make_api_module:
