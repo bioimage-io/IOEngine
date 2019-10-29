@@ -21,11 +21,28 @@ class BioEngine:
         self.packages = {}
         self._service_lock = threading.Lock()
         self.vendor_api = vendor_api
+        self._event_handlers = {}
+
+    def on(self, event, handler):
+        if event in self._event_handlers:
+            handlers = self._event_handlers[event]
+        else:
+            handlers = []
+            self._event_handlers[event] = handlers
+        handlers.append(handler)
+
+    def emit(self, event, args):
+        if event in self._event_handlers:
+            for h in self._event_handlers[event]:
+                try:
+                    h(args)
+                except Exception as e:
+                    print(e)
 
     def generate_engine_api(self, package_info=None, make_api_module=True):
         """Return engine api."""
         engine_api = dotdict(
-            showMessage=print, show_message=print, register=self.register_service
+            showMessage=print, show_message=print, register=self.register
         )
         if self.vendor_api:
             engine_api.update(self.vendor_api)
@@ -53,9 +70,11 @@ class BioEngine:
             raise UnsupportedAPI
         self.services.append(dotdict(**api))
 
+        self.emit("register_service", api)
+
     def register(self, **kwarg):
         """Register api resources."""
-        if kwarg["type"] == "service":
+        if kwarg["type"] == "service" or kwarg["type"] == "model":
             self.register_service(kwarg)
         else:
             raise NotImplementedError
